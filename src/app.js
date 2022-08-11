@@ -37,7 +37,7 @@ app.post("/register", async (req, res) => {
 
     if (oldUser) {
       return res.json({ error: "User Exists" });
-      }
+    }
     await User.create({
       fname,
       lname,
