@@ -91,3 +91,17 @@ app.post("/userData", async (req, res) => {
     res.send({ status: "error", data: error });
   }
 });
+
+
+
+const socketio = require("socket.io");
+
+const server = app.listen(process.env.PORT, () =>
+  console.log(`Server started on ${3000}`)
+);
+const io = socketio(server, {
+  cors: {
+    origin: "0.0.0.0:3000",
+    credentials: true,
+  },
+});
