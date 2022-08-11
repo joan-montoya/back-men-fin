@@ -49,3 +49,26 @@ app.post("/register", async (req, res) => {
     res.send({ status: "error" });
   }
 });
+
+app.get("/", async (req, res) => {
+  res.send("Hello World");
+})
+
+app.post("/login-user", async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.json({ error: "User Not found" });
+  }
+  if (await bcrypt.compare(password, user.password)) {
+    const token = jwt.sign({ email: user.email }, JWT_SECRET);
+
+    if (res.status(201)) {
+      return res.json({ status: "ok", data: token });
+    } else {
+      return res.json({ error: "error" });
+    }
+  }
+  res.json({ status: "error", error: "InvAlid Password" });
+});
