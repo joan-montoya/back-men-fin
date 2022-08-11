@@ -26,3 +26,26 @@ mongoose
   .catch((e) => console.log(e));
 
 require("./userDetails");
+
+const User = mongoose.model("UserInfo");
+app.post("/register", async (req, res) => {
+  const { fname, lname, email, password } = req.body;
+
+  const encryptedPassword = await bcrypt.hash(password, 10);
+  try {
+    const oldUser = await User.findOne({ email });
+
+    if (oldUser) {
+      return res.json({ error: "User Exists" });
+      }
+    await User.create({
+      fname,
+      lname,
+      email,
+      password: encryptedPassword,
+    });
+    res.send({ status: "ok" });
+  } catch (error) {
+    res.send({ status: "error" });
+  }
+});
