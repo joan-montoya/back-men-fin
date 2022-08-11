@@ -72,3 +72,22 @@ app.post("/login-user", async (req, res) => {
   }
   res.json({ status: "error", error: "InvAlid Password" });
 });
+
+app.post("/userData", async (req, res) => {
+  try {
+    const { token } = req.body;
+    const user = jwt.verify(token, JWT_SECRET);
+    console.log(user);
+
+    const useremail = user.email;
+    User.findOne({ email: useremail })
+      .then((data) => {
+        res.send({ status: "ok", data: data });
+      })
+      .catch((error) => {
+        res.send({ status: "error", data: error });
+      });
+  } catch (error) {
+    res.send({ status: "error", data: error });
+  }
+});
